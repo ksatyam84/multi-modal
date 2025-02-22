@@ -4,7 +4,7 @@ import requests
 import pandas as pds
 
 
-csv_file = "RAW_DATA/mymoviedb_EAS510.csv"
+csv_file = "/RAW_DATA/mymoviedb_EAS510.csv"
 output_folder = "/datasets/all_poster_images"
 
 os.mkdir(output_folder, exist_ok=True)
