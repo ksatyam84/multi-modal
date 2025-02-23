@@ -173,7 +173,7 @@ def ld_img_dir(path, label_array):
     
 
 
-def main():
+"""def main():
     # Code to be executed when the script is run directly   
     #print(data)
 
@@ -198,3 +198,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
