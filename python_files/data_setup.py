@@ -4,19 +4,31 @@ import requests
 import pandas as pd
 
 
-csv_file = "RAW_DATA/mymoviedb_EAS510.csv"
-ROOT_FOLDER = "datasets/"
+#csv_file = "RAW_DATA/mymoviedb_EAS510.csv"
+ROOT_FOLDER = ""
 
-"""
-try:
-    os.makedirs(output_folder, exist_ok=True)
-    print(f"Directory '{output_folder}' created or already exists.")
-except FileExistsError:
-    print(f"A file with the name '{output_folder}' already exists.")"""
+#data = pd.read_csv(csv_file) #created a Pandas Dataframe object
 
-data = pd.read_csv(csv_file) #created a Pandas Dataframe object
+def set_root_path(path):
+
+    ### Set the root path for the project, BEFORE CALLING ANY FUNCTION TO BUILD CUSTOM DATA SAMPLES.
+    # Args:
+    #     path (str): The root directory path to be set.
+    # Returns:
+    #     str: The root directory path.
+
+    ROOT_FOLDER = path
+
+    return ROOT_FOLDER
 
 def download_all_image_files(local_path, url_array):
+
+    ### Download all images from the given URLs and save them to the specified local path.
+    # Args: 
+    #     local_path (str): The local directory path where the images will be saved.
+    #     url_array (list): A list of URLs pointing to the images to be downloaded.
+    # Returns: 
+    #     None
 
     for url in url_array:
         try: 
@@ -37,27 +49,50 @@ def download_all_image_files(local_path, url_array):
 
     print(f"Download completed for path: {local_path}")
 
-
 def get_genres(input_dataframe):
+    
+    ### Get a list of unique genres from the input dataframe.
+    # Args:
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:
+    #     list: A list of unique genres.
 
     indiv_genres = get_indiv_elements_from_column("Genre", input_dataframe)
 
     return indiv_genres
 
-
 def get_titles(input_dataframe):
+    
+    ### Get a list of unique titles from the input dataframe.
+    # Args:
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:
+    #     list: A list of unique titles.
 
     indiv_titles = get_indiv_elements_from_column("Title", input_dataframe)
     
     return indiv_titles
     
 def get_img_urls(input_dataframe):
+    
+    ### Get a list of unique image URLs from the input dataframe.
+    # Args:
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:      
+    #     list: A list of unique image URLs.
 
     indiv_img_urls = get_indiv_elements_from_column("Poster_Url", input_dataframe)
     
     return indiv_img_urls
 
 def get_indiv_elements_from_column(name, input_dataframe):
+    
+    ### Get a list of unique elements from a specified column in the input dataframe.
+    # Args:
+    #     name (str): The name of the column to extract elements from.
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:
+    #     list: A list of unique elements from the specified column.
 
     indiv_elements = []
 
@@ -70,8 +105,14 @@ def get_indiv_elements_from_column(name, input_dataframe):
 
     return indiv_elements
 
-
 def print_elements(name, indiv_elements):
+    
+    ### Print the number of unique elements and their indices from a specified list.
+    # Args:
+    #     name (str): The name of the list to be printed.
+    #     indiv_elements (list): The list of unique elements to be printed.
+    # Returns:
+    #     None
 
     print(f"Number of Individual {name}: {len(indiv_elements)}")
     print(f"\n Here they are: \n ")
@@ -80,6 +121,13 @@ def print_elements(name, indiv_elements):
         print(f"Index: {index+1}, {element}")
 
 def mk_element_dir(name, path=ROOT_FOLDER):
+    
+    ### Create a directory for a specified element.
+    # Args:
+    #     name (str): The name of the element for which the directory will be created.
+    #     path (str): The path where the directory will be created. Defaults to ROOT_FOLDER.
+    # Returns:
+    #     None
 
     new_path = path + name
 
@@ -89,8 +137,13 @@ def mk_element_dir(name, path=ROOT_FOLDER):
     except FileExistsError:
         print(f"A file with the name '{new_path}' already exists.")
 
-
 def mk_genre_image_dict(input_dataframe):
+    
+    ### Create a dictionary of genres and their corresponding image URLs from the input dataframe.
+    # Args:
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:
+    #     list: A list of dictionaries, each containing a genre and its corresponding image URL.
 
     element_dict = []
     genres = get_genres(input_dataframe)
@@ -102,9 +155,17 @@ def mk_genre_image_dict(input_dataframe):
         print(element_dict)
 
     return element_dict
-
-   
+ 
 def mkdir_elements(sample_name, label_array, input_dataframe):
+    
+    ### Create directories for a sample and its corresponding labels.
+    # Args:
+    #     sample_name (str): The name of the sample for which directories will be created.
+    #     label_array (list): A list of labels for which directories will be created.
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    # Returns:
+    #     None
+
     
     train_sample_name = sample_name + "/Train"
     test_sample_name = sample_name + "/Test"
@@ -127,8 +188,17 @@ def mkdir_elements(sample_name, label_array, input_dataframe):
     except FileExistsError:
         print(f"A file with the name '{sample_name}' already exists.")
 
-
 def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_name):
+    
+    ### Collect URLs of a specific element from the input dataframe.
+    # Args:
+    #     element_name (str): The name of the element for which URLs will be collected.
+    #     input_dataframe (pd.DataFrame): The input dataframe containing movie data.
+    #     label_col_name (str): The name of the column containing labels.
+    #     url_col_name (str): The name of the column containing URLs.
+    # Returns:
+    #     list: A list of URLs corresponding to the specified element.
+
     
     element_urls = []
     tl_movies = 0
@@ -147,9 +217,14 @@ def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_
 
     return element_urls
 
-
-
 def ld_img_dir(path, label_array):
+    
+    ### Downoad images from a specified directory and organize them into training and testing sets.
+    # Args:
+    #     path (str): The path to the directory containing images.
+    #     label_array (list): A list of labels corresponding to the images.
+    # Returns:
+    #     None
 
 
     for label in label_array:
@@ -171,31 +246,3 @@ def ld_img_dir(path, label_array):
 
     print(f"Full sample image set download complete")
     
-
-
-"""def main():
-    # Code to be executed when the script is run directly   
-    #print(data)
-
-    #print_elements("Genres",get_genres(data))
-    #mk_genre_image_dict(data)
-    #mkdir_elements("SampleV0", get_genres(data), data)
-    label_array = ['Action', 'Documentary', 'Romance']
-
-    
-
-    ld_img_dir(ROOT_FOLDER + "SampleV0", label_array)
-    #print_elements("Titles",get_titles(data))
-    #clearprint_elements("Urls",get_img_urls(data))
-
-    #print(data)
-    #if "Action" in data.get("Genre")[0]:
-       # print(data.get("Poster_Url")[0])
-    
-
-
-
-
-if __name__ == "__main__":
-    main()
-"""
