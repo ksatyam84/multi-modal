@@ -31,36 +31,35 @@ class TinyVGG(nn.Module):
         # Returns:
         #  None        
                 
-            super().__init__()
+        super().__init__()
 
             # Create a first Conv2D NN block
             # Note: The input shape is 28x28
             #       After the first block, it will be 26x26
-            self.conv_block_1 = nn.Sequential(
-                    nn.Conv2d(in_channels=input_shape, out_channels=hidden_units, kernel_size=3, stride=1 padding=0),
-                    nn.ReLU(),
-                    nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool2d(kernel_size=2, stride=2)
-                )
-            
-            # Create a second Conv2D NN block
-            # Note: The output shape of the first block is 26x26
-            #       After the second block, it will be 13x13
-            self.conv_block_2 = nn.Sequential(
-                    nn.Conv2d(hidden_units, hidden_units, kernel_size=3, padding=0),
-                    nn.ReLU(),
-                    nn.Conv2d(hidden_units, hidden_units, kernel_size=3, padding=0),
-                    nn.ReLU(),
-                    nn.MaxPool2d(2)
-                )
+        self.conv_block_1 = nn.Sequential(
+                nn.Conv2d(in_channels=input_shape, out_channels=hidden_units, kernel_size=3, stride=1 padding=0),
+                nn.ReLU(),
+                nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=0),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2))
+        
+        # Create a second Conv2D NN block
+        # Note: The output shape of the first block is 26x26
+        #       After the second block, it will be 13x13
+        self.conv_block_2 = nn.Sequential(
+                nn.Conv2d(hidden_units, hidden_units, kernel_size=3, padding=0),
+                nn.ReLU(),
+                nn.Conv2d(hidden_units, hidden_units, kernel_size=3, padding=0),
+                nn.ReLU(),
+                nn.MaxPool2d(2)
+            )
 
-            # Create a classifier
-            self.classifier = nn.Sequential(
-                    nn.Flatten(),
-                    # Where did this in_features shape come from?
-                    # It's because each layer of our network compresses and changes the shape of our inputs data.
-                    nn.Linear(in_features=hidden_units*13*13,out_features=output_shape)
+        # Create a classifier
+        self.classifier = nn.Sequential(
+                nn.Flatten(),
+                # Where did this in_features shape come from?
+                # It's because each layer of our network compresses and changes the shape of our inputs data.
+                nn.Linear(in_features=hidden_units*13*13,out_features=output_shape)
     )
             
     def forward(self, x: torch.Tensor):

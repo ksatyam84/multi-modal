@@ -3,9 +3,18 @@ import csv
 import requests
 import pandas as pd
 
-from torchvision import datasets, transforms
+import matplotlib.pyplot as plt
+
+import torch
+
+import time
+
+import torchvision
+from torchvision import datasets
+from torchvision.transforms import v2 as transforms
 from torch.utils.data import DataLoader
 
+from tqdm import tqdm
 
 ROOT_FOLDER = ""
 NUM_WORKERS = os.cpu_count()
@@ -29,7 +38,7 @@ def create_dataloaders(train_dir: str, test_dir: str, transform: transforms.Comp
             Where class_names is a list of the target classes.
 
         Example usage:
-            train_dataloader, test_dataloader, class_names = \
+            train_dataloader, test_dataloader, class_names = 
                 = create_dataloaders(train_dir=path/to/train_dir,
                                     test_dir=path/to/test_dir,
                                     transform=some_transform,
@@ -40,7 +49,7 @@ def create_dataloaders(train_dir: str, test_dir: str, transform: transforms.Comp
         
         Let's put our TinyVGG() model class into a script, note sometimes people just name it models.py and put all their baseline models (three or four) in one file.
 """
-    train_data = datasets.ImageFolder(train_dir, transform = transform.)
+    train_data = datasets.ImageFolder(train_dir, transform = transform)
     test_data = datasets.ImageFolder(test_dir, transform = transform)
 
     classes = train_data.classes
@@ -289,12 +298,40 @@ def ld_img_dir(path, label_array):
 
     print(f"Full sample image set download complete")
     
+def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 def main():
     # Your code here
-    train_dataloader, test_dataloader, class_names = create_dataloaders("datasets/SampleV0/Train", "datasets/SampleV0/Test", batch_size=32)
+    image_transform = transforms.Compose([transforms.ToDtype(torch.uint8, scale=True), transforms.Resize(size=(224, 224),
+                                         antialias=True), transforms.RandomPerspective(distortion_scale=0.2, p=.4), transforms.ToImage(),transforms.ToDtype(torch.float32, scale=True), transforms.Normalize([.5, .5, .5], [.1, .1, .1])])
+    
+    train_dataloader, test_dataloader, class_names = create_dataloaders("/Users/kkodweis/Github-Repos/EAS510-BasicsAI/multi-modal/datasets/SampleV0/Train", "/Users/kkodweis/Github-Repos/EAS510-BasicsAI/multi-modal/datasets/SampleV0/Test", image_transform, batch_size=32)
 
-    print(class_names)
+    i = 0
+    for batch in tqdm(train_dataloader, "Train Batches: "):
+        # Process the batch
+        i+=1
+        #inputs, labels = batch
+        #print("Input batch shape:", inputs.shape)
+        #print("Label batch shape:", labels.shape)
+
+    j = 0
+    for batch in tqdm(test_dataloader, "Test Batches: "):
+        # Process the batch
+        j+=1
+        #inputs, labels = batch
+        #print("Input batch shape:", inputs.shape)
+        #print("Label batch shape:", labels.shape)
+
+    print(f"Number of Train Batchs: {i}")
+
+    print(f"Number of Test Batchs: {j}")
+
+    #print(class_names)
 
 if __name__ == "__main__":
     main()
