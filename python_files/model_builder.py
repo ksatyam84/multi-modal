@@ -1,6 +1,7 @@
 """
 Contains PyTorch model code to instantiate a TinyVGG model.
 """
+
 import torch
 from torch import nn
 
@@ -36,12 +37,14 @@ class TinyVGG(nn.Module):
             # Create a first Conv2D NN block
             # Note: The input shape is 28x28
             #       After the first block, it will be 26x26
+            # 
         self.conv_block_1 = nn.Sequential(
-                nn.Conv2d(in_channels=input_shape, out_channels=hidden_units, kernel_size=3, stride=1 padding=0),
+                nn.Conv2d(in_channels=input_shape, out_channels=hidden_units, kernel_size=3, stride=1, padding=0),
                 nn.ReLU(),
                 nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=0),
                 nn.ReLU(),
-                nn.MaxPool2d(kernel_size=2, stride=2))
+                nn.MaxPool2d(kernel_size=2, stride=2)
+            )
         
         # Create a second Conv2D NN block
         # Note: The output shape of the first block is 26x26
@@ -62,7 +65,7 @@ class TinyVGG(nn.Module):
                 nn.Linear(in_features=hidden_units*13*13,out_features=output_shape)
     )
             
-    def forward(self, x: torch.Tensor):
+def forward(self, x: torch.Tensor):
           
         ### Defines the forward pass of the model
         #
@@ -70,7 +73,7 @@ class TinyVGG(nn.Module):
         #   x: A PyTorch tensor of shape (batch_size, input_shape, 28, 28). 
         # Returns:
         #   PyTorch tensor of shape (batch_size, output_shape).   
-
+    
     x = self.conv_block_1(x)
     x = self.conv_block_2(x)
     x = self.classifier(x)
