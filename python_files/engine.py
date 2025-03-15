@@ -23,7 +23,7 @@ def train_stp(model: torch.nn.Module,
     train_loss = 0
     train_acc = 0
 
-    for batch, (X,y) in tqdm(enumerate(dataloader), "Training Set: "):
+    for batch, (X,y) in enumerate(dataloader):
         X, y = X.to(device), y.to(device)
 
         y_predictions = model(X)
@@ -57,7 +57,7 @@ def test_stp(model: torch.nn.Module,
     test_acc = 0
 
     with torch.inference_mode():
-        for batch, (X, y) in tqdm(enumerate(dataloader), "Testing Set: "):
+        for batch, (X, y) in enumerate(dataloader):
 
             X,y = X.to(device), y.to(device)
 
@@ -90,6 +90,9 @@ def train(model: torch.nn.Module,
 
         test_loss, test_acc = test_stp(model=model, dataloader=test_dataloader, loss_fn=loss_fn, device=device)
 
+        print(f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} \n"
+              f"Test Loss: {test_loss:.4f} | Test Acc: {test_acc:.4f}\n")        
+        
         results["train_loss"].append(train_loss)
         results["train_acc"].append(train_acc)
         results["test_loss"].append(test_loss)

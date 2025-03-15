@@ -1,67 +1,17 @@
 import os
-import csv
 import requests
 import pandas as pd
 
-import matplotlib.pyplot as plt
 
-import torch
-
-import time
-
-import torchvision
 from torchvision import datasets
 from torchvision.transforms import v2 as transforms
 from torch.utils.data import DataLoader
 
-from tqdm import tqdm
 
 ROOT_FOLDER = ""
 NUM_WORKERS = os.cpu_count()
 
-def create_dataloaders(train_dir: str, test_dir: str, transform: transforms.Compose, batch_size: int, num_workers = NUM_WORKERS):
 
-    """ Creates training and testing DataLoaders.
-        
-        Takes in a training directory and testing directory path and turns
-        them into PyTorch Datasets and then into PyTorch DataLoaders.
-        
-        Args:
-            train_dir: Path to training directory.
-            test_dir: Path to testing directory.
-            transform: torchvision transforms to perform on training and testing data.
-            batch_size: Number of samples per batch in each of the DataLoaders.
-            num_workers: An integer for number of workers per DataLoader.
-
-        Returns:
-            A tuple of (train_dataloader, test_dataloader, class_names).
-            Where class_names is a list of the target classes.
-
-        Example usage:
-            train_dataloader, test_dataloader, class_names = 
-                = create_dataloaders(train_dir=path/to/train_dir,
-                                    test_dir=path/to/test_dir,
-                                    transform=some_transform,
-                                    batch_size=32,
-                                    num_workers=4)
-
-        If we'd like to make DataLoader 's we can now use the function within data_setup.py like so:
-        
-        Let's put our TinyVGG() model class into a script, note sometimes people just name it models.py and put all their baseline models (three or four) in one file.
-"""
-    train_data = datasets.ImageFolder(train_dir, transform = transform)
-    test_data = datasets.ImageFolder(test_dir, transform = transform)
-
-    classes = train_data.classes
-
-    train_dataloader = DataLoader(train_data, batch_size, shuffle=True, num_workers = NUM_WORKERS, pin_memory= True)
-
-    test_dataloader = DataLoader(test_data, batch_size, shuffle=True, num_workers = NUM_WORKERS, pin_memory= True)
-
-    return train_dataloader, test_dataloader, classes
-
-
-"""
 def set_root_path(path):
 
     ### Set the root path for the project, BEFORE CALLING ANY FUNCTION TO BUILD CUSTOM DATA SAMPLES.
@@ -73,8 +23,6 @@ def set_root_path(path):
     ROOT_FOLDER = path
 
     return ROOT_FOLDER
-
-
 
 def download_all_image_files(local_path, url_array):
 
@@ -304,7 +252,6 @@ def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, elemen
     print(f"Full sample image set download complete")
 
 def mk_sample(sample_name: str, input_dataframe: pd.DataFrame, cat:str, element: str, labels=[]):
-    
 
     if labels != []:
         cats = labels #get_indiv_elements_from_column(cat, input_dataframe)
@@ -313,13 +260,6 @@ def mk_sample(sample_name: str, input_dataframe: pd.DataFrame, cat:str, element:
 
     else:
         pass
-    
-
-    
-def imshow(img):
-    img = img / 2 + 0.5     # unnormalize
-    npimg = img.numpy()
-    plt.imshow(npimg.transpose(npimg, (1, 2, 0)))
-    plt.show()"
-    ""
-    """
+        #cats = get_indiv_elements_from_column(cat, input_dataframe)
+        #mkdir_elements(sample_name, cats)
+        #ld_img_dir(ROOT_FOLDER + sample_name, input_dataframe, cats, cat, element)

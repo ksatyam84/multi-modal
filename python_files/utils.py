@@ -5,7 +5,36 @@ Contains various utility functions for PyTorch model training and saving.
 import torch
 
 from pathlib import Path
+from torchvision import transforms
 
+
+
+class perspectiveV0():
+
+    def __init__(self):
+        self.data_transform = transforms.Compose([
+            transforms.v2.ToDtype(torch.uint8, scale=True),
+            transforms.Resize(size=(224, 224), antialias=True),
+            transforms.RandomPerspective(distortion_scale=0.2, p=.4),
+            transforms.v2.ToImage(),
+            transforms.v2.ToDtype(torch.float32, scale=True),
+            transforms.Normalize([.5, .5, .5], [.1, .1, .1])
+        ])
+
+class perspectiveV1():    
+
+    def __init__(self):
+        self.data_transform = transforms.Compose([
+            transforms.v2.ToDtype(torch.uint8, scale=True),
+            transforms.Resize(size=(224, 224), antialias=True),
+            transforms.RandomPerspective(distortion_scale=0.2, p=.4),
+            transforms.v2.ToImage(),
+            transforms.v2.ToDtype(torch.float32, scale=True),
+            transforms.Normalize([.5, .5, .5], [.1, .1, .1])
+        ])
+    
+
+# Function to save a PyTorch model
 def save_model(model: torch.nn.Module, target_dir: str, model_name: str):
 
     target_dir_path = Path(target_dir)
