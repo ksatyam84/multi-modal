@@ -9,28 +9,30 @@ from torchvision import transforms
 
 
 
-class perspectiveV0():
-
-    def __init__(self):
+class baseV0:
+    
+    def __init__(self, height: int = 64, width: int = 64):
         self.data_transform = transforms.Compose([
             transforms.v2.ToDtype(torch.uint8, scale=True),
-            transforms.Resize(size=(224, 224), antialias=True),
+            transforms.Resize(size=(height, width), antialias=True),
             transforms.RandomPerspective(distortion_scale=0.2, p=.4),
             transforms.v2.ToImage(),
             transforms.v2.ToDtype(torch.float32, scale=True),
             transforms.Normalize([.5, .5, .5], [.1, .1, .1])
         ])
 
-class perspectiveV1():    
+class perspectiveV0:    
 
-    def __init__(self):
+    def __init__(self, height: int = 64, width: int = 64):
         self.data_transform = transforms.Compose([
             transforms.v2.ToDtype(torch.uint8, scale=True),
-            transforms.Resize(size=(224, 224), antialias=True),
-            transforms.RandomPerspective(distortion_scale=0.2, p=.4),
+            transforms.Resize(size=(height, width), antialias=True),
+            transforms.RandomPerspective(distortion_scale=0.1, p=.4),
+            transforms.RandomGrayscale(p=0.2),
+            transforms.RandomHorizontalFlip(p=0.5),
             transforms.v2.ToImage(),
             transforms.v2.ToDtype(torch.float32, scale=True),
-            transforms.Normalize([.5, .5, .5], [.1, .1, .1])
+            transforms.Normalize([.5, .5, .5], [.5, .5, .5])
         ])
     
 

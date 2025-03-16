@@ -16,7 +16,7 @@ class TinyVGG(nn.Module):
             nn.ReLU(),
             nn.Conv2d(in_channels=hidden_units, out_channels=hidden_units, kernel_size=3, stride=1, padding=0),
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2)
+            nn.MaxPool2d(kernel_size=3, stride=3)
         )
 
         self.conv_block_2 = nn.Sequential(
@@ -24,7 +24,7 @@ class TinyVGG(nn.Module):
             nn.ReLU(),
             nn.Conv2d(hidden_units, hidden_units, kernel_size=3, padding=0),
             nn.ReLU(),
-            nn.MaxPool2d(2)
+            nn.MaxPool2d(3)
         )
 
         # Calculate the flattened size after the convolutional layers
@@ -37,7 +37,7 @@ class TinyVGG(nn.Module):
 
     def _get_flattened_size(self, input_shape: int, hidden_units: int) -> int:
         with torch.no_grad():
-            dummy_input = torch.zeros(1, input_shape, 224, 224)  # Assuming input images are 224x224
+            dummy_input = torch.zeros(1, input_shape, 64, 64)  # Assuming input images are 224x224
             x = self.conv_block_1(dummy_input)
             x = self.conv_block_2(x)
             return x.numel()
