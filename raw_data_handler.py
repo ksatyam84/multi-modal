@@ -5,7 +5,6 @@ import pandas as pd
 
 from torchvision import datasets
 from torchvision.transforms import v2 as transforms
-from torch.utils.data import DataLoader
 
 
 ROOT_FOLDER = ""
@@ -88,7 +87,7 @@ def get_img_urls(input_dataframe):
     
     return indiv_img_urls
 
-def get_indiv_elements_from_column(name, input_dataframe):
+def get_indiv_elements_from_column(name, separator, input_dataframe):
     
     ### Get a list of unique elements from a specified column in the input dataframe.
     # Args:
@@ -101,7 +100,7 @@ def get_indiv_elements_from_column(name, input_dataframe):
 
     for element_set in input_dataframe.get(name):
         if not isinstance(element_set, float):
-            for element_item in element_set.split(', '):
+            for element_item in element_set.split(separator):
                 if element_item not in indiv_elements:
                     indiv_elements.append(element_item)
     
@@ -154,12 +153,12 @@ def mk_genre_image_dict(input_dataframe):
     for genre in genres:
         element_dict.append(genre)
 
-    for element_set in input_dataframe.get("Genres"):
+    for element_set in input_dataframe.get("Genre"):
         print(element_dict)
 
     return element_dict
  
-def mkdir_elements(sample_name, label_array):
+def mkdir_elements(sample_name, label_array, root_path):
     
     ### Create directories for a sample and its corresponding labels.
     # Args:
@@ -175,17 +174,17 @@ def mkdir_elements(sample_name, label_array):
 
 
     try:
-        os.makedirs(ROOT_FOLDER + sample_name, exist_ok=True)
+        os.makedirs(root_path + sample_name, exist_ok=True)
         print(f"Directory {sample_name} created successfully")
 
         mk_element_dir(train_sample_name)
         for label in label_array: 
-            mk_element_dir(label,ROOT_FOLDER + train_sample_name + "/")
+            mk_element_dir(label,root_path + train_sample_name + "/")
 
 
         mk_element_dir(test_sample_name)
         for label in label_array: 
-            mk_element_dir(label,ROOT_FOLDER + test_sample_name + "/")
+            mk_element_dir(label,root_path + test_sample_name + "/")
 
 
     except FileExistsError:
@@ -208,7 +207,7 @@ def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_
     i = 0
 
     for genre_str in input_dataframe.get(label_col_name):
-        #print(genre_str)
+        print(genre_str)
         if not isinstance(genre_str, float):
 
             if element_name in genre_str:
@@ -240,12 +239,12 @@ def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, elemen
         print(f"train_url_array length: {len(train_url_array)}")
         print(f"test_url_array length: {len(test_url_array)}")  
     
-        #print(path+"/Train/"+label)
+        print(path+"/Train/"+label)
 
         download_all_image_files(path+"/Train/"+label, train_url_array)
         print(f"Label: {label} | Train sample image set download complete.")
 
-        #print(path+"/Test/"+label)
+        print(path+"/Test/"+label)
         download_all_image_files(path+"/Test/"+label, test_url_array)
         print(f"Label: {label} | Test sample image set download complete.")
 
