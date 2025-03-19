@@ -6,7 +6,7 @@ import os
 import torch
 from tqdm.auto import tqdm
 import data_setup, engine, model_builder, utils
-
+ 
 NUM_EPOCHS = 5
 BATCH_SIZE = 32
 HIDDEN_UNITS = 25
