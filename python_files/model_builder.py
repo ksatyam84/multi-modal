@@ -4,6 +4,7 @@ Contains PyTorch model code to instantiate a TinyVGG model.
 
 import torch
 from torch import nn
+import torch.nn.functional as F
 
 
 # The TinyVGG model is a simple convolutional neural network (CNN) architecture.
