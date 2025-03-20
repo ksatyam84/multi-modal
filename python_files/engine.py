@@ -1,4 +1,11 @@
 """
+Filename: engine.py
+
+Assignment: Movie Poster Genre Classification Multi-Model project
+Class: Basics of AI
+
+Authors: Kristopher Kodweis & Kumar Satyam
+
 Contains functions for training and testing a PyTorch model.
 """
 

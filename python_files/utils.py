@@ -1,7 +1,13 @@
 """
-Contains various utility functions for PyTorch model training and saving.
-"""
+Filename: utils.py
 
+Assignment: Movie Poster Genre Classification Multi-Model project
+Class: Basics of AI
+
+Authors: Kristopher Kodweis & Kumar Satyam
+
+Contains functions for creating the iterable data for each of the models and data types.
+"""
 import torch
 
 from pathlib import Path

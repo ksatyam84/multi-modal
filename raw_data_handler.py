@@ -1,7 +1,7 @@
 import os
 import requests
 import pandas as pd
-
+from tqdm import tqdm
 
 from torchvision import datasets
 from torchvision.transforms import v2 as transforms
@@ -32,10 +32,10 @@ def download_all_image_files(local_path, url_array):
     # Returns: 
     #     None
 
-    for url in url_array:
+    for url in tqdm(url_array):
         try: 
             response = requests.get(url, stream=True)
-            print(response)
+            #print(response)
             response.raise_for_status()
             
             filename = local_path +"/" + url.split("/")[-1]
@@ -45,9 +45,9 @@ def download_all_image_files(local_path, url_array):
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
                     
-            print(f"Downloaded: {url}")
+            #print(f"Downloaded: {url}")
         except requests.exceptions.RequestException as e:
-            print(f"Error downloading {url}: {e}")
+            pass#print(f"Error downloading {url}: {e}")
 
     print(f"Download completed for path: {local_path}")
 
@@ -99,11 +99,29 @@ def get_indiv_elements_from_column(name, separator, input_dataframe):
     indiv_elements = []
 
     for element_set in input_dataframe.get(name):
+        print(element_set)
         if not isinstance(element_set, float):
-            for element_item in element_set.split(separator):
-                if element_item not in indiv_elements:
-                    indiv_elements.append(element_item)
-    
+                          
+            if element_set.find("[") != -1:
+                print(f"element_set: {element_set}")
+                
+                for element_item in element_set.split(separator):
+                    print(f"element_item: {element_item}")
+                    element_item = element_item.replace('[', '')
+                    element_item = element_item.replace(']', '')
+                    element_item = element_item.replace("'", "")
+                    
+                    if element_item not in indiv_elements:
+                        indiv_elements.append(element_item)
+
+                print(type(element_item)) 
+            
+            elif isinstance(element_set, str):
+                for element_item in element_set.split(separator):
+                    if element_item not in indiv_elements:
+                        indiv_elements.append(element_item)
+
+        
 
     return indiv_elements
 
@@ -172,17 +190,17 @@ def mkdir_elements(sample_name, label_array, root_path):
     train_sample_name = sample_name + "/Train"
     test_sample_name = sample_name + "/Test"
 
-
+    print("HALLLO")
     try:
-        os.makedirs(root_path + sample_name, exist_ok=True)
+        os.makedirs(root_path + sample_name + '/', exist_ok=True)
         print(f"Directory {sample_name} created successfully")
 
-        mk_element_dir(train_sample_name)
+        #mk_element_dir(train_sample_name, root_path)
         for label in label_array: 
             mk_element_dir(label,root_path + train_sample_name + "/")
 
 
-        mk_element_dir(test_sample_name)
+        #mk_element_dir(test_sample_name, root_path)
         for label in label_array: 
             mk_element_dir(label,root_path + test_sample_name + "/")
 
@@ -190,7 +208,7 @@ def mkdir_elements(sample_name, label_array, root_path):
     except FileExistsError:
         print(f"A file with the name '{sample_name}' already exists.")
 
-def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_name):
+def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_name, img_url=""):
     
     ### Collect URLs of a specific element from the input dataframe.
     # Args:
@@ -205,21 +223,25 @@ def collect_element_urls(element_name, input_dataframe, label_col_name, url_col_
     element_urls = []
     tl_movies = 0
     i = 0
+    #print(type(input_dataframe))
+    #print(type(input_dataframe.get(url_col_name)[4]))
 
     for genre_str in input_dataframe.get(label_col_name):
-        print(genre_str)
-        if not isinstance(genre_str, float):
 
-            if element_name in genre_str:
-                element_urls.append(input_dataframe.get(url_col_name)[i])
+        if not isinstance(genre_str, float):
+                
+            if element_name in genre_str and input_dataframe.get(url_col_name)[i] is not None:
+                #print(type(input_dataframe.get(url_col_name)[i]))
+                element_urls.append(f"{img_url}{input_dataframe.get(url_col_name)[i]}")
                 tl_movies+=1
+
         i+=1
     
     print(f"i: {i}, {element_name} movies: {tl_movies}, {element_name} urls: {len(element_urls)}")
 
     return element_urls
 
-def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, element: str):
+def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, element: str, img_url=""):
     
     ### Downoad images from a specified directory and organize them into training and testing sets.
     # Args:
@@ -229,9 +251,12 @@ def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, elemen
     #     None
 
 
-    for label in label_array:
+    for label in tqdm(label_array):
 
-        url_array = collect_element_urls(label, input_dataframe, cat, element)
+        #print(label)
+
+        url_array = collect_element_urls(label, input_dataframe, cat, element, img_url)
+        #print(url_array)
 
         train_url_array = url_array[:int(len(url_array)*.8)]
         test_url_array = url_array[int(len(url_array)*.8):]

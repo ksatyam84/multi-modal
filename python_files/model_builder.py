@@ -1,5 +1,11 @@
 """
-Contains PyTorch model code to instantiate a TinyVGG model.
+Filename: model_builder.py
+Assignment: Movie Poster Genre Classification Multi-Model project
+Class: Basics of AI
+
+Authors: Kristopher Kodweis & Kumar Satyam
+
+Contains PyTorch model code to define the models and their behavior
 """
 
 import torch
