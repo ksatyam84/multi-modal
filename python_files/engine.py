@@ -3,10 +3,11 @@ Contains functions for training and testing a PyTorch model.
 """
 
 import torch
-
 from tqdm.auto import tqdm
 from typing import Dict, List, Tuple
 
+
+#Train Step for training the specifed model
 def train_stp(model: torch.nn.Module, 
               dataloader: torch.utils.data.DataLoader, 
               loss_fn: torch.nn.Module, 
@@ -46,7 +47,7 @@ def train_stp(model: torch.nn.Module,
 
     return  train_loss, train_acc
 
-
+#Train Step for training the specifed model
 def test_stp(model: torch.nn.Module, 
              dataloader: torch.utils.data.DataLoader, 
              loss_fn: torch.nn.Module, 
@@ -74,7 +75,7 @@ def test_stp(model: torch.nn.Module,
 
     return test_loss, test_acc
 
-
+#Full train function that trains and tests data against a specifed model and prints/returns the results 
 def train(model: torch.nn.Module, 
           train_dataloader: torch.utils.data.DataLoader, 
           test_dataloader: torch.utils.data.DataLoader, 

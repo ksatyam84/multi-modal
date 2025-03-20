@@ -6,7 +6,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-
+"""THESE ARE TEST MODELS ONLY"""
 # The TinyVGG model is a simple convolutional neural network (CNN) architecture.
 class TinyVGG(nn.Module):
     def __init__(self, input_shape: int, hidden_units: int, output_shape: int) -> None:
@@ -49,31 +49,7 @@ class TinyVGG(nn.Module):
         x = self.classifier(x)
         return x
     
-
-class BasicBlock(nn.Module):
-    expansion = 1
-    def __init__(self, in_channels, out_channels, stride=1):
-        super().__init__()
-        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(out_channels)
-        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn2 = nn.BatchNorm2d(out_channels)
-        
-        self.shortcut = nn.Sequential()
-        if stride != 1 or in_channels != self.expansion * out_channels:
-            self.shortcut = nn.Sequential(
-                nn.Conv2d(in_channels, self.expansion * out_channels, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(self.expansion * out_channels)
-            )
-
-    def forward(self, x):
-        residual = self.shortcut(x)
-        x = F.relu(self.bn1(self.conv1(x)))
-        x = self.bn2(self.conv2(x))
-        x += residual
-        x = F.relu(x)
-        return x
-
+# This is a subcomponent for the ResNet18 model class
 class BasicBlock(nn.Module):
     expansion = 1
     def __init__(self, in_channels, out_channels, stride=1):
@@ -98,6 +74,7 @@ class BasicBlock(nn.Module):
         x = F.relu(x)
         return x
 
+# This is a basic ResNet18 model to be used for testing image classification only
 class ResNet18(nn.Module):
     def __init__(self, num_classes=1000):
         super().__init__()
@@ -132,3 +109,7 @@ class ResNet18(nn.Module):
          x = torch.flatten(x, 1)
          x = self.fc(x)
          return x
+
+
+""" PLEASE DEVELOP EXPERIMENTAL MODELS BELOW FOR TESTING """
+
