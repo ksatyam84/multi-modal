@@ -1,7 +1,13 @@
 """
-Contains various utility functions for PyTorch model training and saving.
-"""
+Filename: utils.py
 
+Assignment: Movie Poster Genre Classification Multi-Model project
+Class: Basics of AI
+
+Authors: Kristopher Kodweis & Kumar Satyam
+
+Contains functions for creating the iterable data for each of the models and data types.
+"""
 import torch
 
 from pathlib import Path
@@ -11,11 +17,11 @@ from torchvision import transforms
 
 class baseV0:
     
-    def __init__(self, height: int = 64, width: int = 64):
+    def __init__(self, height: int = 128, width: int = 128):
         self.data_transform = transforms.Compose([
             transforms.v2.ToDtype(torch.uint8, scale=True),
             transforms.Resize(size=(height, width), antialias=True),
-            transforms.RandomPerspective(distortion_scale=0.2, p=.4),
+            transforms.RandomCrop(size=64, padding=2),
             transforms.v2.ToImage(),
             transforms.v2.ToDtype(torch.float32, scale=True),
             transforms.Normalize([.5, .5, .5], [.1, .1, .1])
