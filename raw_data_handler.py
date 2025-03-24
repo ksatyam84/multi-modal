@@ -275,6 +275,41 @@ def ld_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, elemen
 
     print(f"Full sample image set download complete")
 
+def tst_img_dir(path, input_dataframe: pd.DataFrame, label_array, cat:str, element: str, img_url=""):
+    
+    ### Downoad images from a specified directory and organize them into training and testing sets.
+    # Args:
+    #     path (str): The path to the directory containing images.
+    #     label_array (list): A list of labels corresponding to the images.
+    # Returns:
+    #     None
+
+
+    for label in tqdm(label_array):
+
+        #print(label)
+
+        url_array = collect_element_urls(label, input_dataframe, cat, element, img_url)
+        #print(url_array)
+
+        train_url_array = url_array[:int(len(url_array)*.8)]
+        test_url_array = url_array[int(len(url_array)*.8):]
+
+        print(f"train_url_array length: {len(train_url_array)}")
+        print(f"test_url_array length: {len(test_url_array)}")  
+    
+        print(path+"/Train/"+label)
+
+        #download_all_image_files(path+"/Train/"+label, train_url_array)
+        print(f"Label: {label} | Train sample image set download complete.")
+
+        print(path+"/Test/"+label)
+        #download_all_image_files(path+"/Test/"+label, test_url_array)
+        print(f"Label: {label} | Test sample image set download complete.")
+
+    print(f"Full sample image set download complete")
+
+
 def mk_sample(sample_name: str, input_dataframe: pd.DataFrame, cat:str, element: str, labels=[]):
 
     if labels != []:
