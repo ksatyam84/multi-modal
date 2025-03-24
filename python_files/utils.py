@@ -36,7 +36,6 @@ class baseV0:
         self.data_transform = transforms.Compose([
             transforms.v2.ToDtype(torch.uint8, scale=True),
             transforms.Resize(size=(height, width), antialias=True),
-            transforms.Grayscale(),
             transforms.v2.ToImage(),
             transforms.v2.ToDtype(torch.float32, scale=True),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
